@@ -1,0 +1,1348 @@
+\input{mmd-memoir-header}
+\def\mytitle{Cloudnode User's Guide}
+\def\subtitle{Version 1.0}
+\def\myauthor{Hans J Schroeder}
+\def\affiliation{http:/\slash cloudno.de\slash }
+\def\htmlheader{$<$script type="text\slash javascript"
+src="http:/\slash cdn.mathjax.org\slash mathjax\slash latest\slash MathJax.js?config=TeX-AMS-MML\_HTMLorMML"$>$
+$<$\slash script$>$}
+\def\latexmode{memoir}
+\input{mmd-memoir-begin-doc}
+\chapter{Quick Start Guide}
+\label{quickstartguide}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{5pt}
+
+If this is your first time using Cloudnode, be sure to first install the command line client and look over the platform prerequisites before proceeding. Also, make sure you have a working Node installation, otherwise any node commands listed below will not work.
+
+\begin{itemize}
+\item Create a new cloudnode app
+
+\item Initialize your local working copy
+
+\item Commit to your new app and deploy
+
+\end{itemize}
+
+
+
+\section{Create a new cloudnode app}
+\label{createanewcloudnodeapp}
+
+Go to \href{https://cloudno.de/myapps}{My Apps}\footnote{\href{https://cloudno.de/myapps}{https:/\slash cloudno.de\slash myapps}}, click on ``New Application'' and fill in the form. This will actually:
+
+\begin{itemize}
+\item Create a new sub-domain for your application
+
+\item Provision a virtual machine for your application
+
+\item Setup a git repository to hold your application code
+
+\end{itemize}
+
+
+
+\section{Initialize your local working copy}
+\label{initializeyourlocalworkingcopy}
+
+The easiest way is to use the \href{/cloudnode-command-line}{command line client}\footnote{\href{/cloudnode-command-line}{\slash cloudnode-command-line}} to setup your local working copy.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode app init <app name>
+cloudnode info initializing git repo for <app name> into folder <app name>
+cloudnode info cloning the repo git clone cloudnode@git.cloudno.de:/git/hs/62-6fc0d44abf9974b91625cc10ff118871.git <app name>
+cloudnode info clone complete
+cloudnode info writing app data to config
+cloudnode info writing app files
+cloudnode info processing the initial commit
+cloudnode info attemping to start the new app.
+cloudnode info hello started.
+cloudnode info Some helpful app commands:
+
+ cd ./<app name>
+ curl http://<app name>.cloudno.de/
+  cloudnode app info
+  cloudnode app logs
+  cloudnode app stop|start|restart
+
+\end{verbatim}
+\end{adjustwidth}
+
+This single command automates the following steps, which could also have been executed instead:
+
+\begin{enumerate}
+\item Create a local sub directory for the application
+
+\item Initialize a local repository (git init)
+
+\item Clone the remote repo and the the remote origin URL (git clone {\ldots})
+
+\item Create a sample server.js file with a simple ``Hello World'' application
+
+\item Add the new file to the local repository (git add .)
+
+\item Commit the changes (git commit -am ``Initial commit'')
+
+\item Push the changes live (git push origin master)
+
+\end{enumerate}
+
+You can also launch the application locally to see if it works by running \textbf{node server.js} and navigating to [[http:/\slash 127.0.0.1:8080\slash  in a web browser. Use any port number and IP address; they will be transparently overridden when your app is deployed on Cloudnode.
+
+
+
+\section{Commit to your new app and deploy}
+\label{committoyournewappanddeploy}
+
+To commit changes to your application use the normal git workflow:
+
+\begin{itemize}
+\item Edit your files (vi server.js)
+
+\item Commit the changes (git commit -am ``Change log'')
+
+\item Push the changes online (git push origin master)
+
+\end{itemize}
+
+
+
+\subsection{Commit the changes}
+\label{committhechanges}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git commit -am "Message changed"
+Created commit f57b7a0: Message changed
+1 files changed, 1 insertions(+), 1 deletions(-)
+
+\end{verbatim}
+\end{adjustwidth}
+
+\subsection{Push the changes online}
+\label{pushthechangesonline}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git push origin master
+Counting objects: 5, done.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 315 bytes, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To cloudnode@git.cloudno.de:/git/hs/62-6fc0d44abf9974b91625cc10ff118871.git
+ 5f3a0f9..f57b7a0  master -> master
+Syncing repo with your node VM
+From /git/hs/62-6fc0d44abf9974b91625cc10ff118871.git/.
+ 5f3a0f9..f57b7a0  master     -> origin/master
+Updating 5f3a0f9..f57b7a0
+Fast forward
+ server.js |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+====  Compiling hello...
+====  Restarting your app: hello
+====  App restarted
+====  App successfully deployed to http://hello.cloudno.de
+
+  Finished.
+
+\end{verbatim}
+\end{adjustwidth}
+
+Now your new version is deployed on Cloudnode and the application has been restarted. You can see it running in your browser at the .cloudno.de URL listed in the push output.
+
+\chapter{Prerequisites}
+\label{prerequisites}
+
+Since Cloudnode is a cloud hosting environment, your app must conform to a couple different requirements and prerequisites in order to run on it. By following these best practices in app architecture and design, you can ensure that your app will run well on the Cloudnode platform.
+
+\begin{itemize}
+\item Required Software
+
+\item Best Practices
+
+\item Read-only Filesystem
+
+\item Logs
+
+\item Dependency Management
+
+\item App Initialization
+
+\item Git
+
+\end{itemize}
+
+
+
+\section{Required Software}
+\label{requiredsoftware}
+
+The workflow used to develop and deploy apps on Cloudnode depends on Git, Node.JS, npm and our command line client, which in fact is a node app itself. The tools are available for all major OS'es. See the following links
+
+\begin{itemize}
+\item git - \href{http://git-scm.com/}{http:/\slash git-scm.com\slash } - The distributed version control sysstem
+
+\item node.js - \href{http://nodejs.org}{http:/\slash nodejs.org} - The node server
+
+\item npm - \href{http://npmjs.org/}{http:/\slash npmjs.org\slash } - The Node Package Manager
+
+\item cloudnode - \textbf{npm install cloudnode-cli} - The Cloudnode command line
+
+\end{itemize}
+
+
+
+\section{Best Practices}
+\label{bestpractices}
+
+Take care to keep the size of your app small.
+
+Do not include large files (documents, media files, data files, etc.) in your app. These should be hosted on an outside asset store such as Amazon S3.
+
+Only include modules that you will use.
+
+
+
+\section{Read-only Filesystem}
+\label{read-onlyfilesystem}
+
+Cloudnode apps are not able to write to file filesystem in general. However there are a couple special locations to which you can write files.
+
+\subsection{Cloud storage (\slash mnt)}
+\label{cloudstoragemnt}
+
+All Cloudnode apps have access to limited persistent file storage under \slash mnt. Cloud storage is persistent between requests and app instances.
+
+Cloud storage is designed to store files generated from within your app (e.g. generated stylesheets or asset packages). See \href{/cloud-storage}{Cloud Storage}\footnote{\href{/cloud-storage}{\slash cloud-storage}} for details.
+
+\subsection{Temporary files (\slash tmp)}
+\label{temporaryfilestmp}
+
+The \slash tmp directory in your app root is writeable (for files of reasonable size), but anything written to it should not be expected to endure over hours.
+
+
+
+\section{Logs}
+\label{logs}
+
+Logs on the Cloudnode platform should be considered transient. It is possible to tail the last 100 lines through the command line.
+
+See \href{/troubleshooting}{Troubleshooting}\footnote{\href{/troubleshooting}{\slash troubleshooting}} for full details.
+
+
+
+\section{Dependency Management}
+\label{dependencymanagement}
+
+If your app depends on any npm packages, they need to be installed into your Node VM. See \href{/node-package-manager}{Node package manager}\footnote{\href{/node-package-manager}{\slash node-package-manager}} for details.
+
+
+
+\section{App Initialization}
+\label{appinitialization}
+
+Node looks for a startup file normally called \textbf{server.js} to boot your application. You can choose a different file and directory, when you create the application. For details see the \href{/cloudnode-command-line}{Cloudnode command line}\footnote{\href{/cloudnode-command-line}{\slash cloudnode-command-line}}.
+
+
+
+\section{Git}
+\label{git}
+
+\href{http://git-scm.com}{Git}\footnote{\href{http://git-scm.com}{http:/\slash git-scm.com}} is the only way to push code to Cloudnode for deployment. This means your app must be part of a Git repository. You don’t necessarily need to use Git for version control during development, but when it comes time to deploy to Cloudnode, your app code does need to be committed to a Git repo.
+
+Deployment is as easy as \textbf{git push origin master}. See the \href{/quick-start-guide}{Quick Start Guide}\footnote{\href{/quick-start-guide}{\slash quick-start-guide}} for more details.
+
+For additional help on using Git see the excellent help files at GitHub especially the setup and troubleshooting guides when using ssh key and key phrases: \href{http://help.github.com/}{http:/\slash help.github.com\slash }
+
+\subsection{Git Submodules}
+\label{gitsubmodules}
+
+Git submodules are supported on the Cloudnode platform.
+
+\chapter{Support Resources}
+\label{supportresources}
+
+If you can't find the information here you are looking for, use the \href{http://support.cloudno.de}{Cloudnode support group}\footnote{\href{http://support.cloudno.de}{http:/\slash support.cloudno.de}} to contact us or the other users. 
+
+You can also use the group for technical questions or to showcase your apps.
+
+\chapter{Cloudnode command line}
+\label{cloudnodecommandline}
+
+\textbf{Current version: 0.2.20 (08\slash 28\slash 11) (see also: how to update, changelog)}
+
+The Cloudnode command line tool is an interface to the \href{/api}{Cloudnode Web API}\footnote{\href{/api}{\slash api}} and includes support for creating apps, reading log files, managing apps and user accounts, setting up domains, and configuring apps. 
+
+The command line tool is itself a Node.js application the runs on the client side. See the \href{/prerequisites}{Prerequisites}\footnote{\href{/prerequisites}{\slash prerequisites}} for details.
+
+\section{Installation}
+\label{installation}
+
+If you haven't already done, sign up for a Cloudnode account. You will need to enter your credentials into the command line tool to authorize most of the requests.
+
+The command line tool can be installed using \href{/node-package-manager}{npm}\footnote{\href{/node-package-manager}{\slash node-package-manager}} which also takes care to resolve dependencies.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ npm install cloudnode-cli
+
+\end{verbatim}
+\end{adjustwidth}
+
+\section{Usage}
+\label{usage}
+
+After having installed the client, enter your credentials. This needs to be done only once. The user name is the same as in your OpenID, the password is the API key shown on your \href{https://cloudno.de/account?admin}{account page}\footnote{\href{https://cloudno.de/account?admin}{https:/\slash cloudno.de\slash account?admin}}.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode user setup <username> <password>
+
+cloudnode info verifying credentials
+cloudnode info user verified..
+cloudnode info writing user data to config
+
+\end{verbatim}
+\end{adjustwidth}
+
+Now start the client by typing ``cloudnode''. It will show a list of the available commands.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode
+
+cloudnode info showing all available sub commands
+cloudnode status
+cloudnode coupon
+cloudnode apps
+cloudnode app
+cloudnode user
+cloudnode appdomain
+cloudnode domain
+cloudnode npm
+cloudnode appnpm
+cloudnode info For more help, type cloudnode help <command>
+
+\end{verbatim}
+\end{adjustwidth}
+
+The commands are divided into three types: general commands, user and app commands.
+
+\subsection{General Commands}
+\label{generalcommands}
+
+The status command checks the platform status and displays the number of hosted and running applications.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode status
+
+\end{verbatim}
+\end{adjustwidth}
+
+The apps command displays all your applications together with their port and running status.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode apps
+
+\end{verbatim}
+\end{adjustwidth}
+
+\subsection{User Commands}
+\label{usercommands}
+
+Type ``cloudnode user'' to get an overview of the commands in this category:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode user
+cloudnode user register <coupon-code> - Register a user
+cloudnode user setup <username> <password> - Setup this user
+cloudnode user setpass <password> 
+               - Set a new password for this user
+cloudnode user setkey </path/to/sshkey> 
+               - Set an sshkey (if no argument, ~/.ssh/id_rsa.pub is used)
+cloudnode user create <username> <password> <email address> 
+               <file containing ssh public key> <coupon code> - Create a user
+
+\end{verbatim}
+\end{adjustwidth}
+
+\subsection{App Commands}
+\label{appcommands}
+
+Type ``cloudnode app'' to get an overview of the commands in this category:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode app
+cloudnode <appname> is not required if inside an app directory after you call setup
+cloudnode app setup <appname> - Configure this app for future app commands
+cloudnode app info <appname> - Returns app specific information
+cloudnode app logs <appname> - Returns app logs
+cloudnode app stop|start|restart <appname> - Controls app status.
+cloudnode app create <appname> <startfile> 
+              - Creates a new app named <appname>, <startfile> is optional.
+cloudnode app init <appname> - Fetches the remote repo and sets it up.
+cloudnode app clone <appname> - Fetches the remote repo.
+
+\end{verbatim}
+\end{adjustwidth}
+
+\subsubsection{NPM Commands}
+\label{npmcommands}
+
+Type ``cloudnode npm'' or ``cloudnode appnpm'' to get an overview of the commands in this category:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode npm
+cloudnode All arguments after install|update|uninstall will be sent to npm as packages.
+cloudnode npm install <packages> - Installs the list of specified packages to this app.
+cloudnode npm update <packages> - Update the list of specified packages to this app.
+cloudnode npm uninstall <packages> - Removes the list of specified packages to this app.
+
+\end{verbatim}
+\end{adjustwidth}
+
+Because every node application is running in its own virtual machine, you need to install every module you application depends on.
+
+\subsubsection{Domain Commands}
+\label{domaincommands}
+
+The domain command are used to setup and manage custom domains for you appications. See the \href{/custom-domains}{Custom Domains}\footnote{\href{/custom-domains}{\slash custom-domains}} chapter for additional information on this.
+
+\chapter{Node package manager}
+\label{nodepackagemanager}
+
+\textbf{Current version: npm 1.0.22 (08\slash 07\slash 11) (see also: how to update, changelog)}
+
+Cloudnode uses \href{http://npmjs.org/}{npm}\footnote{\href{http://npmjs.org/}{http:/\slash npmjs.org\slash }} for dependency management. For an introduction and additional information see the Author's \href{http://howtonode.org/introduction-to-npm}{article on How To Node}\footnote{\href{http://howtonode.org/introduction-to-npm}{http:/\slash howtonode.org\slash introduction-to-npm}}. If you need more specific information, the best place to look is npm’s help system itself, which is very extensive. Just use npm help .
+
+When you application depends on some other modules use the Cloudnode command line to install the required packages into your VM. Additional dependencies wil be resolved by npm. If your application requires for instance express, run the following command:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode npm install express
+
+\end{verbatim}
+\end{adjustwidth}
+
+All arguments after install will be sent to npm as package names. You can also use the npm command to update and uninstall packages. To get an overview of all npm commands run ``cloudnode npm'':
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode npm
+cloudnode All arguments after install|update|uninstall will be sent to npm as packages.
+cloudnode npm list - Lists the installed npm packages for this app.
+cloudnode npm install <packages> - Installs the list of specified packages to this app.
+cloudnode npm update <packages> - Update the list of specified packages to this app.
+cloudnode npm uninstall <packages> - Removes the list of specified packages to this app.
+
+\end{verbatim}
+\end{adjustwidth}
+
+Remember that each application runs in its own isolated environment. You need to handle dependencies for each application individually. When you want to share program code among your applications and that code might also be useful for other node users, consider to publish your own npm package.
+
+\chapter{API}
+\label{api}
+
+Cloudnode is build on a RESTful API the allows to execute all commands from the web frontend, the command line tool or a future client-side app.
+
+We are currently running the ``stable'' version of Node v.0.4.10 and we support Node.JS VMs, we call Cloudnode machines. This means that you can install your own NPM modules. Git is required to push updates to your Cloudnode machine. The following API calls are defined:
+
+\begin{itemize}
+\item Status (\autoref{status})
+
+\item User (\autoref{user})
+
+\item App (\autoref{app})
+
+\item Apps (\autoref{apps})
+
+\item Env (\autoref{env})
+
+\item NPM (\autoref{npm})
+
+\item Appdomains (\autoref{appdomains})
+
+\item CLI Commands (\autoref{cli-commands})
+
+\item Git (\autoref{git})
+
+\end{itemize}
+
+
+
+\subsection{Status}
+\label{status}
+
+\begin{quote}
+
+Get Status :: GET
+Base URL: https:/\slash cloudno.de
+
+\slash status - Returns platform status and number of apps running
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl https://cloudno.de/status
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{User}
+\label{user}
+
+\begin{quote}
+
+Register User :: POST (Coupon is required.)
+Base URL: https:/\slash cloudno.de
+
+\slash user - creates user account (pass in user and password and email and id\_rsa.pub string) Ensure that all + in the ssh key are substituted for their \%2B counter parts, else your key will break. Run this on your command line to copy your RSA string and swap out the plus signs: ``cat \ensuremath{\sim}\slash .ssh\slash id\_rsa.pub \textbar{} sed s\slash `+'\slash `\%2B'\slash g \textbar{} pbcopy''
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X POST -d "user=testuser&password=123& \
+  email=chris@cloudno.de&rsakey=ssh-rsa AAAAB3NzaC1yc..." https://cloudno.de/user
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Update User :: PUT
+Base URL: https:/\slash api.cloudno.de
+
+\slash user - update user account (pass in password and\slash or RSA key - ``cat \ensuremath{\sim}\slash .ssh\slash id\_rsa.pub \textbar{} sed s\slash `+'\slash `\%2B'\slash g \textbar{} pbcopy'')
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X PUT -u "testuser:123" -d "password=test" https://api.cloudno.de/user
+$ curl -X PUT -u "testuser:123" -d "rsakey=1234567" https://api.cloudno.de/user
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Delete User :: DELETE
+Base URL: https:/\slash api.cloudno.de
+
+\slash user - delete user account (requires basic auth)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X DELETE -u "testuser:123" https://api.cloudno.de/user
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{App}
+\label{app}
+
+\begin{quote}
+
+Create Application :: POST
+Base URL: https:/\slash api.cloudno.de
+
+\slash app - create nodejs app for hosting (requires basic auth and returns the port address required for use along with a git repo to push to)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X POST -u "testuser:123" -d "appname=a&start=hello.js" https://api.cloudno.de/app
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Change Application :: PUT
+Base URL: https:/\slash api.cloudno.de
+
+\slash app - update starting app name (requires basic auth, appname, and starting page and returns the port address required for use along with a git repo to push to and running status of the app)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X PUT -u "testuser:123" -d "appname=a&start=hello1.js" https://api.cloudno.de/app
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Start\slash Stop Application :: POST
+Base URL: https:/\slash api.cloudno.de
+
+\slash app - start and stop your hosted nodejs app (requires basic auth, appname, and running=true\textbar{}false and returns the port address required for use along with a git repo to push to)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X PUT -u "testuser:123" -d "appname=a&running=true" https://api.cloudno.de/app
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Delete Application :: DELETE
+Base URL: https:/\slash api.cloudno.de
+
+\slash app - delete nodejs app (requires basic auth and appname)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X DELETE -u "testuser:123" -d "appname=test" https://api.cloudno.de/app
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Application Information :: GET
+Base URL: https:/\slash api.cloudno.de
+
+\slash app\slash  - get nodejs app info (requires basic auth and appname)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -u "testuser:123" https://api.cloudno.de/app/appname
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{Apps}
+\label{apps}
+
+\begin{quote}
+
+All Applications Information :: GET
+Base URL: https:/\slash api.cloudno.de
+
+\slash apps - get all nodejs app info(requires basic auth)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -u "testuser:123" https://api.cloudno.de/apps
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{Env}
+\label{env}
+
+\begin{quote}
+
+Create\slash Update Environment :: PUT
+Base URL: https:/\slash api.cloudno.de
+
+\slash env - create\slash update environment key\slash value pair (requires basic authentication, appname and key\slash value)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X PUT -u "testuser:123" -d "appname=test&key=color&value=red" https://api.cloudno.de/env
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Delete Environment :: DELETE
+Base URL: https:/\slash api.cloudno.de
+
+\slash env - delete environment key\slash value pair (requires basic authentication, appname and key\slash value)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X DELETE -u "testuser:123" -d "appname=test&key=color" https://api.cloudno.de/env
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Get Environment :: GET
+Base URL: https:/\slash api.cloudno.de
+
+\slash env - get all environment key\slash value pairs (requires basic authentication and appname)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -u "testuser:123" https://api.cloudno.de/env/test
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{NPM}
+\label{npm}
+
+\begin{quote}
+
+Install\slash Upgrade\slash Uninstall NPM Packages :: POST
+Base URL: https:/\slash api.cloudno.de
+
+\slash npm - Allows you to manage the NPM packages for an application.
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X POST -u "testuser:123" -d "appname=a&action=install&package=express" \
+       https://api.cloudno.de/npm
+
+$ curl -X POST -u "testuser:123" -d "appname=a&action=update&package=express" \
+       https://api.cloudno.de/npm
+
+$ curl -X POST -u "testuser:123" -d "appname=a&action=uninstall&package=express" \
+       https://api.cloudno.de/npm
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{Appdomains - Add DNS A Record}
+\label{appdomains-adddnsarecord}
+
+\begin{quote}
+
+Create Application Domain :: POST
+Base URL: https:/\slash api.cloudno.de
+
+\slash appdomains - create app domain for hosting example.com (requires basic auth)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X POST -u "testuser:123" -d "appname=test&domain=example.com" \
+       https://api.cloudno.de/appdomains
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Delete Application Domain :: DELETE
+Base URL: https:/\slash api.cloudno.de
+
+\slash appdomains - delete app domain for hosting example.com (requires basic auth)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X DELETE -u "testuser:123" -d "appname=test&domain=example.com" \
+       https://api.cloudno.de/appdomains
+
+\end{verbatim}
+\end{adjustwidth}
+
+\begin{quote}
+
+Application Domain Information :: GET
+Base URL: https:/\slash api.cloudno.de
+
+\slash appdomains - get list of your domains (requires basic auth)
+\end{quote}
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -u "testuser:123" https://api.cloudno.de/appdomains
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{CLI Commands}
+\label{clicommands}
+
+You can install our Command Line Interface by running ``npm install cloudnode-cli''
+
+\begin{quote}
+
+\texttt{cloudnode $<$command$>$ $<$param1$>$ $<$param2$>$}
+\end{quote}
+
+Commands are:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode coupon <email address>
+$ cloudnode user create <username> <password> <email address> \
+            <file containing ssh public key> <coupon code>
+$ cloudnode user setup <username> <password>
+
+\end{verbatim}
+\end{adjustwidth}
+
+The commands below require you to have run `user setup' before:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode user setpass <new password>
+
+\end{verbatim}
+\end{adjustwidth}
+
+You should run user setup after running setpass.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode user setkey <file containing ssh public key>
+$ cloudnode apps list
+$ cloudnode app create <app-name> <initial js file>
+$ cloudnode app info <app-name>
+$ cloudnode app logs <app-name>
+$ cloudnode app start <app-name>
+$ cloudnode app restart <app-name>
+$ cloudnode app stop <app-name>
+$ cloudnode app gitreset <app-name>
+$ cloudnode npm install <app-name> <package name>
+$ cloudnode npm upgrade <app-name> <package name>
+$ cloudnode npm uninstall <app-name> <package name>
+$ cloudnode appdomain add <app-name> <domain-name>
+$ cloudnode appdomain delete <app-name> <domain-name>
+$ cloudnode appdomains
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{Git}
+\label{git}
+
+Deploying and updating your Node.js application is simple.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X POST -u "testuser:123" -d "appname=myapp&start=hello.js" \
+       https://api.cloudno.de/app
+
+\end{verbatim}
+\end{adjustwidth}
+
+Upon creating or changing your application via our API, you will receive a Git reop URL from our API response. Add a Cloudnode remote to your project as follows:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git remote add cloudnode the_url_returned_by_our_api
+
+\end{verbatim}
+\end{adjustwidth}
+
+Finally push your updates to your new Cloudnode environment as follows:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git push cloudnode master
+
+\end{verbatim}
+\end{adjustwidth}
+
+Start your application.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ curl -X PUT -u "testuser:123" -d "appname=myapp&running=true" \
+       https://api.cloudno.de/app  
+
+\end{verbatim}
+\end{adjustwidth}
+
+Visit your application via http:/\slash myapp.cloudno.de
+
+\chapter{Git}
+\label{git}
+
+Git is a distributed version control system. Each application on Cloudnode has its own repository. On every push command the Node VM is updated with the latest version of your application. An automatic restart ensures that the most recent version goes live after the push command completes.
+
+Cloudnode Remote
+Branches
+Special Directories
+Submodules
+
+\subsection{Cloudnode Remote}
+\label{cloudnoderemote}
+
+When creating a new Cloudnode App with the command line client, a Git remote pointing to Cloudnode is automatically configured. If you wish to configure the remote manually or re-add the remote under a different name, you can:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git remote add cloudnode git@cloudno.de:demoapp.git
+
+\end{verbatim}
+\end{adjustwidth}
+
+In this example Cloudnode (the third argument to git) is the name of the remote and demoapp should be replaced with your app name.
+
+Branches
+
+Cloudnode will ignore branches other than master if they are pushed. Only the master branch is used for deployment.
+
+You can, of course, push any local branch to the master branch of the Cloudnode remote. The syntax for that is:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ git push cloudnode demobranch:master
+
+\end{verbatim}
+\end{adjustwidth}
+
+In this example Cloudnode (the second argument to git) is the name of the remote and demobranch is the name of the local branch being deployed to Cloudnode.
+
+\subsection{Special Directories}
+\label{specialdirectories}
+
+A couple directories are handled specially by the Cloudnode app compiler when receiving your app code. The following directories will be ignored if they exist in your Git repository, so they can be used by the platform for special purposes:
+
+mnt\slash 
+Used for mounting your app's Cloud Storage.
+log\slash 
+Used for log collection. See Logging for details and usage.
+tmp\slash 
+Writeable directory available for transient file storage. See Platform Prerequisites for details and usage.
+
+\subsection{Submodules}
+\label{submodules}
+
+Git submodules are supported on the Cloudnode platform.
+
+\chapter{Troubleshooting}
+\label{troubleshooting}
+
+If you need help with your login or with creating \slash  updating your application, please see the following guides:
+
+\begin{itemize}
+\item Login to the Cloudnode web site
+
+\item Using the API \slash  CLI
+
+\item SSH issues
+
+\item Analysing the application log files
+
+\end{itemize}
+
+
+
+\section{Login to the Cloudnode web site}
+\label{logintothecloudnodewebsite}
+
+With Cloudnode you don't need to remember passwords, nor you need to worry about leaked or hacked passwords, because we simply don't use passwords and rely on OpenID \slash  OAuth instead. Use your existing account at one of the supported providers to login into our web site.
+
+
+
+\section{Using the API \slash  CLI}
+\label{usingtheapicli}
+
+The API uses basic authentication over a secure SSL connection. We plan to change this as soon as the Nodester platform supports OAuth. The user name is the same as in your OpenID. Instead of a password an API key is used. The API key is maintained by the platform and is shown on \href{https://cloudno.de/account?admin}{your account}\footnote{\href{https://cloudno.de/account?admin}{https:/\slash cloudno.de\slash account?admin}} page. \textbf{You need to create at least one application to get access to your API key.}
+
+To test the platform and the physical connection, use the status command:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode status
+cloudnode info checking api status for: api.cloudno.de
+cloudnode info using secure connection
+cloudnode info status up
+cloudnode info appshosted 23
+cloudnode info appsrunning 13
+
+\end{verbatim}
+\end{adjustwidth}
+
+This ensures, that the platform is up and running and that you can open a secure connection to it.
+
+The next step is to check your credentials by running a command, that requires authentication.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode apps
+cloudnode info hello on port 8062 running: empty
+
+\end{verbatim}
+\end{adjustwidth}
+
+This command will list all your applications. If you get an ERROR instead, setup the cloudnode client with your user name and API key as a password.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode user setup <user name> <api key>
+cloudnode info verifying credentials
+cloudnode info user verified..
+cloudnode info writing user data to config
+
+\end{verbatim}
+\end{adjustwidth}
+
+You are now ready to use the command line tool.
+
+
+
+\section{SSH issues}
+\label{sshissues}
+
+Make sure that you have uploaded your public SSH key to \href{https://cloudno.de/account?ssh}{your account}\footnote{\href{https://cloudno.de/account?ssh}{https:/\slash cloudno.de\slash account?ssh}}. Compare the fingerprint that is displayed on your account page with the one displayed when running the following command on your local computer:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ ssh-keygen -l -f .ssh/id_rsa.pub
+
+2048 ab:f2:46:70:30:48:31:05:79:e2:eb:f5:95:38:08:50 .ssh/id_rsa.pub
+
+\end{verbatim}
+\end{adjustwidth}
+
+With your SSH key on file, you can create your first application. The ssh connection will not work, until you have created an application.
+
+After your first app is created, the next step is testing your connection by running \emph{ssh cloudnode@git.cloudno.de}. If your key works, you should get a success message:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ ssh cloudnode@git.cloudno.de
+
+Hi <user>! You've successfully authenticated, but Cloudnode does not provide shell access.
+Connection to git.cloudno.de closed.
+
+\end{verbatim}
+\end{adjustwidth}
+
+\section{Permission denied (publickey)}
+\label{permissiondeniedpublickey}
+
+This is usually caused when ssh cannot find your keys. Make sure your key is in the default location, \emph{\ensuremath{\sim}\slash .ssh}. If you run ssh-keygen again and just press enter at all 3 prompts it will be placed here automatically. Then you can add the contents of id\_rsa.pub to your account.
+
+\section{Finding out what keys ssh is using}
+\label{findingoutwhatkeyssshisusing}
+
+Finding what keys ssh is offering to the server is fairly simple. Run \emph{ssh -vT cloudnode@git.cloudno.de} and look at the output:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+debug1: Authentications that can continue: publickey
+debug1: Next authentication method: publickey
+debug1: Trying private key: /home/user/.ssh/id_rsa
+debug1: Trying private key: /home/user/.ssh/id_dsa
+debug1: No more authentication methods to try.
+Permission denied (publickey).
+
+\end{verbatim}
+\end{adjustwidth}
+
+\section{SSH private key passphrases}
+\label{sshprivatekeypassphrases}
+
+Using a private key without a passphrase is basically the same as writing down that random password in a file on your computer. Anyone who gains access to your drive has gained access to every system you use that key with. The solution is obvious, add a passphrase.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ ssh-keygen -p
+Enter file in which the key is (/home/user/.ssh/id_rsa):
+Key has comment '/home/user/.ssh/id_rsa'
+Enter new passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved with the new passphrase.
+
+\end{verbatim}
+\end{adjustwidth}
+
+When you use a passphrase protected key, you need to add it to your ssh-agent. It stores it securely and you don't have to reenter your passphrase. The use of the agent is mandatory, as on most systems git eats stdin and you won't be able to type in your passphrase during git operations. 
+
+
+
+\section{Analysing the application log files}
+\label{analysingtheapplicationlogfiles}
+
+Whenever your application throws an exception, it will be logged to you applications's
+ main log file. You can also use the \textbf{console.log()} instruction to write to that file.
+
+You can view the log file from the ``My Apps'' management page. You can also use the command line
+to tail your application log file. Run the ``cloudnode app logs'' command from your application directory.
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode app logs
+
+cloudnode info Checking config..
+cloudnode info Munging require paths..
+cloudnode info Globallizing Buffer
+cloudnode info Reading file...
+cloudnode info Cloudnode wrapped script starting (32623) at  Wed, 06 Apr 2011 23:17:40 GMT
+cloudnode info [INFO] You asked to listen on port 8080 but cloudnode will use port 8007 instead..
+cloudnode info Server running
+cloudnode info
+
+\end{verbatim}
+\end{adjustwidth}
+
+\section{Cloudnode Support Group}
+\label{cloudnodesupportgroup}
+
+For additional help visit the \href{http://support.cloudno.de}{Cloudnode Support Group}\footnote{\href{http://support.cloudno.de}{http:/\slash support.cloudno.de}}.
+
+\section{Contact Us}
+\label{contactus}
+
+You can also use the contact form from every page's footer to send us a private message.
+
+\chapter{Node.js}
+\label{node.js}
+
+\textbf{Current version: 0.4.10 (08\slash 07\slash 11) (see also: how to update, changelog)}
+
+Node.js is a non-blocking, evented I\slash O framework using the V8 JavaScript engine.
+
+We host Node.js applications in their own VMs, which we call Node Machines. Cloudnode is based on the Nodester platform. During the beta stage, we may need to shut the service down for upgrades or service without notice. You should join our \href{http://groups.google.com/group/cloudnode}{discussion group}\footnote{\href{http://groups.google.com/group/cloudnode}{http:/\slash groups.google.com\slash group\slash cloudnode}} to share any feedback and get important announcements that can affect running apps.
+
+\begin{itemize}
+\item Preparing for deployment (\autoref{preparing})
+
+\item Deploying to Cloudnode (\autoref{deploying})
+
+\item Dependencies (\autoref{dependencies})
+
+\end{itemize}
+
+
+
+\subsection{Preparing for deployment}
+\label{preparingfordeployment}
+
+You can name the main file of your app like you want. Just make sure to specify that name, when you use the ``create app'' command. You can also specify any port you like as parameter to the listen function (in this sample port 8124). The platform will transparently override the parameter with the port of your Node VM which is in effect. 
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(8124, "127.0.0.1");
+console.log('Server running at http://127.0.0.1:8124/');
+
+\end{verbatim}
+\end{adjustwidth}
+
+Whenever a port needs to be specified as a parameter for other function calls, use the environment variable ``app\_port'' to use the port in use by your Node VM like in the following example:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+var webrepl = require('webrepl');
+var port = process.env["app_port"];
+
+webrepl.start(port);
+console.log("Web repl started (Listening on port " + port + ")");
+
+\end{verbatim}
+\end{adjustwidth}
+
+
+
+\subsection{Deploying to Cloudnode}
+\label{deployingtocloudnode}
+
+To create an app with the the Cloudnode command line use the following command:
+
+\begin{adjustwidth}{2.5em}{2.5em}
+\begin{verbatim}
+
+$ cloudnode app create <appname> <startfile> 
+          - Creates a new app named <appname>, <startfile> is optional
+
+\end{verbatim}
+\end{adjustwidth}
+
+Deployment is done with every Git push command. Additionally the application is restarted to active the changes introduced with the push command.
+
+
+
+\subsection{Dependencies}
+\label{dependencies}
+
+When your repository includes sub modules, these are also push to the Node Machine.
+
+\chapter{CouchDB}
+\label{couchdb}
+
+The Cloudnode platform offers a CouchDB database option to store persistent data. The database is connected through a fast local connection. We also provide a SSL secured remote connection, which can be used to access the database remotely or for replication.
+
+\subsection{CouchDB Administration}
+\label{couchdbadministration}
+
+The ``My Databases'' tab lists your databases. From here you can also create new databases, delete existing database or manage your databases using the Futon Web GUI. You can add sharing rules and manage your map reduce functions. Clicking on a database name opens the database details page, where you find API keys and URLs to externally access you database. 
+
+\subsection{Usage Example}
+\label{usageexample}
+
+We plan to provide example apps that demonstrate how to use Node.js and CouchDB. We are currently preferring cradle to access CouchDB. Cradle can be installed using npm. For details on using npm with your Node VM see \href{/node-package-manger}{Node package manager}\footnote{\href{/node-package-manger}{\slash node-package-manger}}.
+
+\chapter{SSL}
+\label{ssl}
+
+Secure Sockets Layer is a protocol to encrypt traffic over the internet. We support SSL to access the \href{/api}{API}\footnote{\href{/api}{\slash api}}. To use SSL use the following URL:
+
+\begin{quote}
+
+https:/\slash secure.cloudno.de\slash 
+\end{quote}
+
+We are working on a solution to allow every hosted application to use SSL.
+
+\chapter{HTTP Caching}
+\label{httpcaching}
+
+All hosted NodeJS apps leverage a HTTP cache on Cloudnode. We are using \href{http://www.varnish-cache.org/}{Varnish}\footnote{\href{http://www.varnish-cache.org/}{http:/\slash www.varnish-cache.org\slash }} as a HTTP accelerator. Varnish uses numerous techniques to improve the performance. It even has compiled configuration libraries, in-memory logging, and works hand in hand with the OS for memory management.
+
+\subsection{Cache Invalidation}
+\label{cacheinvalidation}
+
+The biggest challenge when using caching is the control of the cache TTL and cache invalidation. Varnish only delivers a cached page, when it is absolutely safe to do so. The URL and all parameters have to match for a cache hit. So a Node app can control caching in different ways. Per default no caching takes place, but you should decide which pages or parts of your app could benefit from caching. Your application's response time will improve dramatically when you take the advantage of caching.
+
+\subsection{Cache TTL Control}
+\label{cachettlcontrol}
+
+Every application that is hosted on Cloudnode, even when running on a custom domain, leverages the caching layer. The time to live, or TTL, can easily be controlled using Node's response.setCacheable() call. By default, pages are not cached. When set to true, pages are cached for a long time, a perfect choice for pictures and other static content. When set to undefined, the cache headers need to be supplied by the application. This option allows custom control of the cache TTL times.
+
+\chapter{Cloud Storage}
+\label{cloudstorage}
+
+Every Node application on Cloudnode runs in a \href{node-vm}{virtual machine}\footnote{\href{node-vm}{node-vm}} with its own disk storage. The disk holds a full checkout of the application's \href{/git}{Git}\footnote{\href{/git}{\slash git}} repository. So you have access to modules sub-modules and static resources, you have checked in. The disk also holds all Node modules you have installed using the \href{/node-package-manager}{npm}\footnote{\href{/node-package-manager}{\slash node-package-manager}} command and a minimum set of directories to get Linux running like \textbf{\slash etc}.
+
+\subsection{Special Directories}
+\label{specialdirectories}
+
+You should not assume, that there is write access to the disk except to the \textbf{\slash mnt} and \textbf{\slash tmp} directories. Your application can use these directories to store dynamic data. As the names suggest, \textbf{\slash tmp} can be used to store volatile files and \textbf{\slash mnt} can be used to store permanent files. These will always ``follow'' your application and be mounted at \textbf{\slash mnt}.
+
+\chapter{Custom Domains}
+\label{customdomains}
+
+Cloudnode allows you to have Node apps written and hosted on Cloudnode respond to requests from your own domain names. For example, if you own the domain hardtoremember.com and the Node app hardtoremember.cloudno.de, then you can configure things such that visitors to hardtoremember.com are served the Node app. The app is still created and hosted on Cloudnode servers.
+
+To accomplish this, you need to:
+
+\begin{itemize}
+\item Own a domain.
+
+\item Configure it to point to the Cloudnode platform.
+
+\end{itemize}
+
+To own a domain, you can use any popular registrar service such as GoDaddy or EasyDNS.
+To configure it to point to the Cloudnode platform, you need to create a ``CNAME'' record. See instructions for how to do this with GoDaddy or with EasyDNS.
+
+DNS can be tricky, so if you need help, just ask in the Cloudnode group.
+
+\subsection{Example CNAME Record}
+\label{examplecnamerecord}
+
+\begin{quote}
+
+www.example.com. CNAME example.cloudno.de
+\end{quote}
+
+Make sure to use the symbolic name and not an IP address, because IP addresses are changing.
+
+\subsection{Steps to activate a custom domain on Cloudnode}
+\label{stepstoactivateacustomdomainoncloudnode}
+
+Custom domains are added as routes to you application using the \href{/cloudnode-command-line}{Cloudnode command line}\footnote{\href{/cloudnode-command-line}{\slash cloudnode-command-line}}. To add the domain www.example.com to your application:
+
+\begin{enumerate}
+\item Go to your configured application directory
+
+\item Run the following command line:
+
+\end{enumerate}
+
+\begin{quote}
+
+\begin{verbatim}
+$ cloudnode appdomain add www.example.com    
+\end{verbatim}
+
+\end{quote}
+
+After these steps your application should be reachable under the URL http:/\slash www.example.com.
+
+\chapter{Deploy Hooks}
+\label{deployhooks}
+
+Deploy hooks are used internally on Cloudnode to checkout the latest version into your Node VM. They are currently not supported for custom actions.
+
+\input{mmd-memoir-footer}
+
+\end{document}

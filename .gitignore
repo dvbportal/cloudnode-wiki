@@ -1,0 +1,7 @@
+*.idx
+*.ist
+*.toc
+guide-formatted.pdf
+*.aux
+*.glo
+*.out

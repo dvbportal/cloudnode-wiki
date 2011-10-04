@@ -1,0 +1,14 @@
+latex input:		mmd-memoir-header
+Title:				Cloudnode User's Guide
+Subtitle:			Version 1.0
+Author:				Hans J Schroeder
+Affiliation:		http://cloudno.de/
+Base Header Level:	2
+CSS:				http://fletcherpenney.net/css/document.css
+html header:		<script type="text/javascript"
+					src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+latex mode:			memoir
+latex input:		mmd-memoir-begin-doc
+latex footer:		mmd-memoir-footer
+

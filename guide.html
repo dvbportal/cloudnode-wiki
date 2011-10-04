@@ -1,0 +1,681 @@
+<h1 id="quickstartguide">Quick Start Guide</h1>
+
+<p>If this is your first time using Cloudnode, be sure to first install the command line client and look over the platform prerequisites before proceeding. Also, make sure you have a working Node installation, otherwise any node commands listed below will not work.</p>
+
+<ul>
+<li><a href="#create-new-app">Create a new cloudnode app</a></li>
+<li><a href="#init-new-node">Initialize your local working copy</a></li>
+<li><a href="#commit-new-node">Commit to your new app and deploy</a></li>
+</ul>
+
+<p><a name="create-new-app"></a></p>
+
+<h2 id="createanewcloudnodeapp">Create a new cloudnode app</h2>
+
+<p>Go to <span class="external"><a href="https://cloudno.de/myapps">My Apps</a></span>, click on &#8220;New Application&#8221; and fill in the form. This will actually:</p>
+
+<ul>
+<li>Create a new sub-domain for your application</li>
+<li>Provision a virtual machine for your application</li>
+<li>Setup a git repository to hold your application code</li>
+</ul>
+
+<p><a name="init-new-node"></a></p>
+
+<h2 id="initializeyourlocalworkingcopy">Initialize your local working copy</h2>
+
+<p>The easiest way is to use the <a href="/cloudnode-command-line">command line client</a> to setup your local working copy.</p>
+
+<pre><code>$ cloudnode app init &lt;app name&gt;
+cloudnode info initializing git repo for &lt;app name&gt; into folder &lt;app name&gt;
+cloudnode info cloning the repo git clone cloudnode@git.cloudno.de:/git/hs/62-6fc0d44abf9974b91625cc10ff118871.git &lt;app name&gt;
+cloudnode info clone complete
+cloudnode info writing app data to config
+cloudnode info writing app files
+cloudnode info processing the initial commit
+cloudnode info attemping to start the new app.
+cloudnode info hello started.
+cloudnode info Some helpful app commands:
+
+ cd ./&lt;app name&gt;
+ curl http://&lt;app name&gt;.cloudno.de/
+  cloudnode app info
+  cloudnode app logs
+  cloudnode app stop|start|restart
+</code></pre>
+
+<p>This single command automates the following steps, which could also have been executed instead:</p>
+
+<ol>
+<li>Create a local sub directory for the application</li>
+<li>Initialize a local repository (git init)</li>
+<li>Clone the remote repo and the the remote origin URL (git clone &#8230;)</li>
+<li>Create a sample server.js file with a simple &#8220;Hello World&#8221; application</li>
+<li>Add the new file to the local repository (git add .)</li>
+<li>Commit the changes (git commit -am &#8220;Initial commit&#8221;)</li>
+<li>Push the changes live (git push origin master)</li>
+</ol>
+
+<p>You can also launch the application locally to see if it works by running <strong>node server.js</strong> and navigating to <span class="external">[[http://127.0.0.1:8080/</span> in a web browser. Use any port number and IP address; they will be transparently overridden when your app is deployed on Cloudnode.</p>
+
+<p><a name="commit-new-node"></a></p>
+
+<h2 id="committoyournewappanddeploy">Commit to your new app and deploy</h2>
+
+<p>To commit changes to your application use the normal git workflow:</p>
+
+<ul>
+<li>Edit your files (vi server.js)</li>
+<li>Commit the changes (git commit -am &#8220;Change log&#8221;)</li>
+<li>Push the changes online (git push origin master)</li>
+</ul>
+
+<p><br/></p>
+
+<h3 id="committhechanges">Commit the changes</h3>
+
+<pre><code>$ git commit -am &quot;Message changed&quot;
+Created commit f57b7a0: Message changed
+1 files changed, 1 insertions(+), 1 deletions(-)
+</code></pre>
+
+<h3 id="pushthechangesonline">Push the changes online</h3>
+
+<pre><code>$ git push origin master
+Counting objects: 5, done.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 315 bytes, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To cloudnode@git.cloudno.de:/git/hs/62-6fc0d44abf9974b91625cc10ff118871.git
+ 5f3a0f9..f57b7a0  master -&gt; master
+Syncing repo with your node VM
+From /git/hs/62-6fc0d44abf9974b91625cc10ff118871.git/.
+ 5f3a0f9..f57b7a0  master     -&gt; origin/master
+Updating 5f3a0f9..f57b7a0
+Fast forward
+ server.js |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+====  Compiling hello...
+====  Restarting your app: hello
+====  App restarted
+====  App successfully deployed to http://hello.cloudno.de
+
+  Finished.
+</code></pre>
+
+<p>Now your new version is deployed on Cloudnode and the application has been restarted. You can see it running in your browser at the .cloudno.de URL listed in the push output.</p>
+
+<p>The following video shows all steps in detail:</p>
+
+<p><object width="640" height="480">
+<param name="allowfullscreen" value="true" />
+<param name="allowscriptaccess" value="always" />
+<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=28273944&server=vimeo.com&show_title=1&show_byline=0&show_portrait=0&color=&fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=28273944&server=vimeo.com&show_title=1&show_byline=0&show_portrait=0&color=&fullscreen=1" type="application/x-shockwave-flash" width="640" height="480"></embed>
+</object>
+</p>
+<p><small style="font-size: 11px;">Soundtrack: &#8220;Transitions I&#8221; by <a href="http://soundprank.com">soundprank </a>(CC) <a href="http://creativecommons.org/licenses/by/3.0/">Attribution</a> (3.0)</small></p></p>
+
+<h1 id="prerequisites">Prerequisites</h1>
+
+<p>Since Cloudnode is a cloud hosting environment, your app must conform to a couple different requirements and prerequisites in order to run on it. By following these best practices in app architecture and design, you can ensure that your app will run well on the Cloudnode platform.</p>
+
+<ul>
+<li><a href="#required-software">Required Software</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#read-only-filesystem">Read-only Filesystem</a></li>
+<li><a href="#logs">Logs</a></li>
+<li><a href="#dependency-management">Dependency Management</a></li>
+<li><a href="#app-initialization">App Initialization</a></li>
+<li><a href="#git">Git</a></li>
+</ul>
+
+<p><a name="required-software"></a></p>
+
+<h2 id="requiredsoftware">Required Software</h2>
+
+<p>The workflow used to develop and deploy apps on Cloudnode depends on Git, Node.JS, npm and our command line client, which in fact is a node app itself. The tools are available for all major OS&#8217;es. See the following links</p>
+
+<ul>
+<li>git - <span class="external"><a href="http://git-scm.com/">http://git-scm.com/</a></span> - The distributed version control sysstem</li>
+<li>node.js - <span class="external"><a href="http://nodejs.org">http://nodejs.org</a></span> - The node server</li>
+<li>npm - <span class="external"><a href="http://npmjs.org/">http://npmjs.org/</a></span> - The Node Package Manager</li>
+<li>cloudnode - <strong>npm install cloudnode-cli</strong> - The Cloudnode command line</li>
+</ul>
+
+<p><a name="best-practices"></a></p>
+
+<h2 id="bestpractices">Best Practices</h2>
+
+<p>Take care to keep the size of your app small.</p>
+
+<p>Do not include large files (documents, media files, data files, etc.) in your app. These should be hosted on an outside asset store such as Amazon S3.</p>
+
+<p>Only include modules that you will use.</p>
+
+<p><a name="read-only-filesystem"></a></p>
+
+<h2 id="read-onlyfilesystem">Read-only Filesystem</h2>
+
+<p>Cloudnode apps are not able to write to file filesystem in general. However there are a couple special locations to which you can write files.</p>
+
+<h3 id="cloudstoragemnt">Cloud storage (/mnt)</h3>
+
+<p>All Cloudnode apps have access to limited persistent file storage under /mnt. Cloud storage is persistent between requests and app instances.</p>
+
+<p>Cloud storage is designed to store files generated from within your app (e.g. generated stylesheets or asset packages). See <a href="/cloud-storage">Cloud Storage</a> for details.</p>
+
+<h3 id="temporaryfilestmp">Temporary files (/tmp)</h3>
+
+<p>The /tmp directory in your app root is writeable (for files of reasonable size), but anything written to it should not be expected to endure over hours.</p>
+
+<p><a name="logs"></a></p>
+
+<h2 id="logs">Logs</h2>
+
+<p>Logs on the Cloudnode platform should be considered transient. It is possible to tail the last 100 lines through the command line.</p>
+
+<p>See <a href="/troubleshooting">Troubleshooting</a> for full details.</p>
+
+<p><a name="dependency-management"></a></p>
+
+<h2 id="dependencymanagement">Dependency Management</h2>
+
+<p>If your app depends on any npm packages, they need to be installed into your Node VM. See <a href="/node-package-manager">Node package manager</a> for details.</p>
+
+<p><a name="app-initialization"></a></p>
+
+<h2 id="appinitialization">App Initialization</h2>
+
+<p>Node looks for a startup file normally called <strong>server.js</strong> to boot your application. You can choose a different file and directory, when you create the application. For details see the <a href="/cloudnode-command-line">Cloudnode command line</a>.</p>
+
+<p><a name="git"></a></p>
+
+<h2 id="git">Git</h2>
+
+<p><span class="external"><a href="http://git-scm.com">Git</a></span> is the only way to push code to Cloudnode for deployment. This means your app must be part of a Git repository. You don’t necessarily need to use Git for version control during development, but when it comes time to deploy to Cloudnode, your app code does need to be committed to a Git repo.</p>
+
+<p>Deployment is as easy as <strong>git push origin master</strong>. See the <a href="/quick-start-guide">Quick Start Guide</a> for more details.</p>
+
+<p>For additional help on using Git see the excellent help files at GitHub especially the setup and troubleshooting guides when using ssh key and key phrases: <span class="external"><a href="http://help.github.com/">http://help.github.com/</a></span></p>
+
+<h3 id="gitsubmodules">Git Submodules</h3>
+
+<p>Git submodules are supported on the Cloudnode platform.</p>
+
+<h1 id="supportresources">Support Resources</h1>
+
+<p>If you can&#8217;t find the information here you are looking for, use the <span class="external"><a href="http://support.cloudno.de">Cloudnode support group</a></span> to contact us or the other users. </p>
+
+<p>You can also use the group for technical questions or to showcase your apps.</p>
+
+<h1 id="cloudnodecommandline">Cloudnode command line</h1>
+
+<p><strong>Current version: 0.2.20 (08/28/11) (see also: how to update, changelog)</strong></p>
+
+<p>The Cloudnode command line tool is an interface to the <a href="/api">Cloudnode Web API</a> and includes support for creating apps, reading log files, managing apps and user accounts, setting up domains, and configuring apps. </p>
+
+<p>The command line tool is itself a Node.js application the runs on the client side. See the <a href="/prerequisites">Prerequisites</a> for details.</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>If you haven&#8217;t already done, sign up for a Cloudnode account. You will need to enter your credentials into the command line tool to authorize most of the requests.</p>
+
+<p>The command line tool can be installed using <a href="/node-package-manager">npm</a> which also takes care to resolve dependencies.</p>
+
+<pre><code>$ npm install cloudnode-cli
+</code></pre>
+
+<h2 id="usage">Usage</h2>
+
+<p>After having installed the client, enter your credentials. This needs to be done only once. The user name is the same as in your OpenID, the password is the API key shown on your <span class="external"><a href="https://cloudno.de/account?admin">account page</a></span>.</p>
+
+<pre><code>$ cloudnode user setup &lt;username&gt; &lt;password&gt;
+
+cloudnode info verifying credentials
+cloudnode info user verified..
+cloudnode info writing user data to config
+</code></pre>
+
+<p>Now start the client by typing &#8220;cloudnode&#8221;. It will show a list of the available commands.</p>
+
+<pre><code>$ cloudnode
+
+cloudnode info showing all available sub commands
+cloudnode status
+cloudnode coupon
+cloudnode apps
+cloudnode app
+cloudnode user
+cloudnode appdomain
+cloudnode domain
+cloudnode npm
+cloudnode appnpm
+cloudnode info For more help, type cloudnode help &lt;command&gt;
+</code></pre>
+
+<p>The commands are divided into three types: general commands, user and app commands.</p>
+
+<h3 id="generalcommands">General Commands</h3>
+
+<p>The status command checks the platform status and displays the number of hosted and running applications.</p>
+
+<pre><code>$ cloudnode status
+</code></pre>
+
+<p>The apps command displays all your applications together with their port and running status.</p>
+
+<pre><code>$ cloudnode apps
+</code></pre>
+
+<h3 id="usercommands">User Commands</h3>
+
+<p>Type &#8220;cloudnode user&#8221; to get an overview of the commands in this category:</p>
+
+<pre><code>$ cloudnode user
+cloudnode user register &lt;coupon-code&gt; - Register a user
+cloudnode user setup &lt;username&gt; &lt;password&gt; - Setup this user
+cloudnode user setpass &lt;password&gt; 
+               - Set a new password for this user
+cloudnode user setkey &lt;/path/to/sshkey&gt; 
+               - Set an sshkey (if no argument, ~/.ssh/id_rsa.pub is used)
+cloudnode user create &lt;username&gt; &lt;password&gt; &lt;email address&gt; 
+               &lt;file containing ssh public key&gt; &lt;coupon code&gt; - Create a user
+</code></pre>
+
+<h3 id="appcommands">App Commands</h3>
+
+<p>Type &#8220;cloudnode app&#8221; to get an overview of the commands in this category:</p>
+
+<pre><code>$ cloudnode app
+cloudnode &lt;appname&gt; is not required if inside an app directory after you call setup
+cloudnode app setup &lt;appname&gt; - Configure this app for future app commands
+cloudnode app info &lt;appname&gt; - Returns app specific information
+cloudnode app logs &lt;appname&gt; - Returns app logs
+cloudnode app stop|start|restart &lt;appname&gt; - Controls app status.
+cloudnode app create &lt;appname&gt; &lt;startfile&gt; 
+              - Creates a new app named &lt;appname&gt;, &lt;startfile&gt; is optional.
+cloudnode app init &lt;appname&gt; - Fetches the remote repo and sets it up.
+cloudnode app clone &lt;appname&gt; - Fetches the remote repo.
+</code></pre>
+
+<h4 id="npmcommands">NPM Commands</h4>
+
+<p>Type &#8220;cloudnode npm&#8221; or &#8220;cloudnode appnpm&#8221; to get an overview of the commands in this category:</p>
+
+<pre><code>$ cloudnode npm
+cloudnode All arguments after install|update|uninstall will be sent to npm as packages.
+cloudnode npm install &lt;packages&gt; - Installs the list of specified packages to this app.
+cloudnode npm update &lt;packages&gt; - Update the list of specified packages to this app.
+cloudnode npm uninstall &lt;packages&gt; - Removes the list of specified packages to this app.
+</code></pre>
+
+<p>Because every node application is running in its own virtual machine, you need to install every module you application depends on.</p>
+
+<h4 id="domaincommands">Domain Commands</h4>
+
+<p>The domain command are used to setup and manage custom domains for you appications. See the <a href="/custom-domains">Custom Domains</a> chapter for additional information on this.</p>
+
+<h1 id="nodepackagemanager">Node package manager</h1>
+
+<p><strong>Current version: npm 1.0.22 (08/07/11) (see also: how to update, changelog)</strong></p>
+
+<p>Cloudnode uses <span class="external"><a href="http://npmjs.org/">npm</a></span> for dependency management. For an introduction and additional information see the Author&#8217;s <span class="external"><a href="http://howtonode.org/introduction-to-npm">article on How To Node</a></span>. If you need more specific information, the best place to look is npm’s help system itself, which is very extensive. Just use npm help <topic>.</p>
+
+<p>When you application depends on some other modules use the Cloudnode command line to install the required packages into your VM. Additional dependencies wil be resolved by npm. If your application requires for instance express, run the following command:</p>
+
+<pre><code>$ cloudnode npm install express
+</code></pre>
+
+<p>All arguments after install will be sent to npm as package names. You can also use the npm command to update and uninstall packages. To get an overview of all npm commands run &#8220;cloudnode npm&#8221;:</p>
+
+<pre><code>$ cloudnode npm
+cloudnode All arguments after install|update|uninstall will be sent to npm as packages.
+cloudnode npm list - Lists the installed npm packages for this app.
+cloudnode npm install &lt;packages&gt; - Installs the list of specified packages to this app.
+cloudnode npm update &lt;packages&gt; - Update the list of specified packages to this app.
+cloudnode npm uninstall &lt;packages&gt; - Removes the list of specified packages to this app.
+</code></pre>
+
+<p>Remember that each application runs in its own isolated environment. You need to handle dependencies for each application individually. When you want to share program code among your applications and that code might also be useful for other node users, consider to publish your own npm package.</p>
+
+<h1 id="api">API</h1>
+
+<p>Cloudnode is build on a RESTful API the allows to execute all commands from the web frontend, the command line tool or a future client-side app.</p>
+
+<p>We are currently running the &#8220;stable&#8221; version of Node v.0.4.10 and we support Node.JS VMs, we call Cloudnode machines. This means that you can install your own NPM modules. Git is required to push updates to your Cloudnode machine. The following API calls are defined:</p>
+
+<ul>
+<li><a href="#status">Status</a></li>
+<li><a href="#user">User</a></li>
+<li><a href="#app">App</a></li>
+<li><a href="#apps">Apps</a></li>
+<li><a href="#env">Env</a></li>
+<li><a href="#npm">NPM</a></li>
+<li><a href="#appdomains">Appdomains</a></li>
+<li><a href="#cli-commands">CLI Commands</a></li>
+<li><a href="#git">Git</a></li>
+</ul>
+
+<p><a name="status"></a></p>
+
+<h3 id="status">Status</h3>
+
+<blockquote>
+<p>Get Status :: GET
+Base URL: https://cloudno.de</p>
+
+<p>/status - Returns platform status and number of apps running</p>
+</blockquote>
+
+<pre><code>$ curl https://cloudno.de/status
+</code></pre>
+
+<p><a name="user"></a></p>
+
+<h3 id="user">User</h3>
+
+<blockquote>
+<p>Register User :: POST (Coupon is required.)
+Base URL: https://cloudno.de</p>
+
+<p>/user - creates user account (pass in user and password and email and id_rsa.pub string) Ensure that all + in the ssh key are substituted for their %2B counter parts, else your key will break. Run this on your command line to copy your RSA string and swap out the plus signs: &#8220;cat ~/.ssh/id_rsa.pub | sed s/&#8216;+&#8217;/&#8216;%2B&#8217;/g | pbcopy&#8221;</p>
+</blockquote>
+
+<pre><code>$ curl -X POST -d &quot;user=testuser&amp;password=123&amp; \
+  email=chris@cloudno.de&amp;rsakey=ssh-rsa AAAAB3NzaC1yc...&quot; https://cloudno.de/user
+</code></pre>
+
+<blockquote>
+<p>Update User :: PUT
+Base URL: https://api.cloudno.de</p>
+
+<p>/user - update user account (pass in password and/or RSA key - &#8220;cat ~/.ssh/id_rsa.pub | sed s/&#8216;+&#8217;/&#8216;%2B&#8217;/g | pbcopy&#8221;)</p>
+</blockquote>
+
+<pre><code>$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;password=test&quot; https://api.cloudno.de/user
+$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;rsakey=1234567&quot; https://api.cloudno.de/user
+</code></pre>
+
+<blockquote>
+<p>Delete User :: DELETE
+Base URL: https://api.cloudno.de</p>
+
+<p>/user - delete user account (requires basic auth)</p>
+</blockquote>
+
+<pre><code>$ curl -X DELETE -u &quot;testuser:123&quot; https://api.cloudno.de/user
+</code></pre>
+
+<p><a name="app"></a></p>
+
+<h3 id="app">App</h3>
+
+<blockquote>
+<p>Create Application :: POST
+Base URL: https://api.cloudno.de</p>
+
+<p>/app - create nodejs app for hosting (requires basic auth and returns the port address required for use along with a git repo to push to)</p>
+</blockquote>
+
+<pre><code>$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=a&amp;start=hello.js&quot; https://api.cloudno.de/app
+</code></pre>
+
+<blockquote>
+<p>Change Application :: PUT
+Base URL: https://api.cloudno.de</p>
+
+<p>/app - update starting app name (requires basic auth, appname, and starting page and returns the port address required for use along with a git repo to push to and running status of the app)</p>
+</blockquote>
+
+<pre><code>$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;appname=a&amp;start=hello1.js&quot; https://api.cloudno.de/app
+</code></pre>
+
+<blockquote>
+<p>Start/Stop Application :: POST
+Base URL: https://api.cloudno.de</p>
+
+<p>/app - start and stop your hosted nodejs app (requires basic auth, appname, and running=true|false and returns the port address required for use along with a git repo to push to)</p>
+</blockquote>
+
+<pre><code>$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;appname=a&amp;running=true&quot; https://api.cloudno.de/app
+</code></pre>
+
+<blockquote>
+<p>Delete Application :: DELETE
+Base URL: https://api.cloudno.de</p>
+
+<p>/app - delete nodejs app (requires basic auth and appname)</p>
+</blockquote>
+
+<pre><code>$ curl -X DELETE -u &quot;testuser:123&quot; -d &quot;appname=test&quot; https://api.cloudno.de/app
+</code></pre>
+
+<blockquote>
+<p>Application Information :: GET
+Base URL: https://api.cloudno.de</p>
+
+<p>/app/ - get nodejs app info (requires basic auth and appname)</p>
+</blockquote>
+
+<pre><code>$ curl -u &quot;testuser:123&quot; https://api.cloudno.de/app/appname
+</code></pre>
+
+<p><a name="apps"></a></p>
+
+<h3 id="apps">Apps</h3>
+
+<blockquote>
+<p>All Applications Information :: GET
+Base URL: https://api.cloudno.de</p>
+
+<p>/apps - get all nodejs app info(requires basic auth)</p>
+</blockquote>
+
+<pre><code>$ curl -u &quot;testuser:123&quot; https://api.cloudno.de/apps
+</code></pre>
+
+<p><a name="env"></a></p>
+
+<h3 id="env">Env</h3>
+
+<blockquote>
+<p>Create/Update Environment :: PUT
+Base URL: https://api.cloudno.de</p>
+
+<p>/env - create/update environment key/value pair (requires basic authentication, appname and key/value)</p>
+</blockquote>
+
+<pre><code>$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;appname=test&amp;key=color&amp;value=red&quot; https://api.cloudno.de/env
+</code></pre>
+
+<blockquote>
+<p>Delete Environment :: DELETE
+Base URL: https://api.cloudno.de</p>
+
+<p>/env - delete environment key/value pair (requires basic authentication, appname and key/value)</p>
+</blockquote>
+
+<pre><code>$ curl -X DELETE -u &quot;testuser:123&quot; -d &quot;appname=test&amp;key=color&quot; https://api.cloudno.de/env
+</code></pre>
+
+<blockquote>
+<p>Get Environment :: GET
+Base URL: https://api.cloudno.de</p>
+
+<p>/env - get all environment key/value pairs (requires basic authentication and appname)</p>
+</blockquote>
+
+<pre><code>$ curl -u &quot;testuser:123&quot; https://api.cloudno.de/env/test
+</code></pre>
+
+<p><a name="npm"></a></p>
+
+<h3 id="npm">NPM</h3>
+
+<blockquote>
+<p>Install/Upgrade/Uninstall NPM Packages :: POST
+Base URL: https://api.cloudno.de</p>
+
+<p>/npm - Allows you to manage the NPM packages for an application.</p>
+</blockquote>
+
+<pre><code>$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=a&amp;action=install&amp;package=express&quot; \
+       https://api.cloudno.de/npm
+
+$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=a&amp;action=update&amp;package=express&quot; \
+       https://api.cloudno.de/npm
+
+$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=a&amp;action=uninstall&amp;package=express&quot; \
+       https://api.cloudno.de/npm
+</code></pre>
+
+<p><a name="appdomains"></a></p>
+
+<h3 id="appdomains-adddnsarecord">Appdomains - Add DNS A Record</h3>
+
+<blockquote>
+<p>Create Application Domain :: POST
+Base URL: https://api.cloudno.de</p>
+
+<p>/appdomains - create app domain for hosting example.com (requires basic auth)</p>
+</blockquote>
+
+<pre><code>$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=test&amp;domain=example.com&quot; \
+       https://api.cloudno.de/appdomains
+</code></pre>
+
+<blockquote>
+<p>Delete Application Domain :: DELETE
+Base URL: https://api.cloudno.de</p>
+
+<p>/appdomains - delete app domain for hosting example.com (requires basic auth)</p>
+</blockquote>
+
+<pre><code>$ curl -X DELETE -u &quot;testuser:123&quot; -d &quot;appname=test&amp;domain=example.com&quot; \
+       https://api.cloudno.de/appdomains
+</code></pre>
+
+<blockquote>
+<p>Application Domain Information :: GET
+Base URL: https://api.cloudno.de</p>
+
+<p>/appdomains - get list of your domains (requires basic auth)</p>
+</blockquote>
+
+<pre><code>$ curl -u &quot;testuser:123&quot; https://api.cloudno.de/appdomains
+</code></pre>
+
+<p><a name="cli-commands"></a></p>
+
+<h3 id="clicommands">CLI Commands</h3>
+
+<p>You can install our Command Line Interface by running &#8220;npm install cloudnode-cli&#8221;</p>
+
+<blockquote>
+<p><code>cloudnode &lt;command&gt; &lt;param1&gt; &lt;param2&gt;</code></p>
+</blockquote>
+
+<p>Commands are:</p>
+
+<pre><code>$ cloudnode coupon &lt;email address&gt;
+$ cloudnode user create &lt;username&gt; &lt;password&gt; &lt;email address&gt; \
+            &lt;file containing ssh public key&gt; &lt;coupon code&gt;
+$ cloudnode user setup &lt;username&gt; &lt;password&gt;
+</code></pre>
+
+<p>The commands below require you to have run &#8216;user setup&#8217; before:</p>
+
+<pre><code>$ cloudnode user setpass &lt;new password&gt;
+</code></pre>
+
+<p>You should run user setup after running setpass.</p>
+
+<pre><code>$ cloudnode user setkey &lt;file containing ssh public key&gt;
+$ cloudnode apps list
+$ cloudnode app create &lt;app-name&gt; &lt;initial js file&gt;
+$ cloudnode app info &lt;app-name&gt;
+$ cloudnode app logs &lt;app-name&gt;
+$ cloudnode app start &lt;app-name&gt;
+$ cloudnode app restart &lt;app-name&gt;
+$ cloudnode app stop &lt;app-name&gt;
+$ cloudnode app gitreset &lt;app-name&gt;
+$ cloudnode npm install &lt;app-name&gt; &lt;package name&gt;
+$ cloudnode npm upgrade &lt;app-name&gt; &lt;package name&gt;
+$ cloudnode npm uninstall &lt;app-name&gt; &lt;package name&gt;
+$ cloudnode appdomain add &lt;app-name&gt; &lt;domain-name&gt;
+$ cloudnode appdomain delete &lt;app-name&gt; &lt;domain-name&gt;
+$ cloudnode appdomains
+</code></pre>
+
+<p><a name="git"></a></p>
+
+<h3 id="git">Git</h3>
+
+<p>Deploying and updating your Node.js application is simple.</p>
+
+<pre><code>$ curl -X POST -u &quot;testuser:123&quot; -d &quot;appname=myapp&amp;start=hello.js&quot; \
+       https://api.cloudno.de/app
+</code></pre>
+
+<p>Upon creating or changing your application via our API, you will receive a Git reop URL from our API response. Add a Cloudnode remote to your project as follows:</p>
+
+<pre><code>$ git remote add cloudnode the_url_returned_by_our_api
+</code></pre>
+
+<p>Finally push your updates to your new Cloudnode environment as follows:</p>
+
+<pre><code>$ git push cloudnode master
+</code></pre>
+
+<p>Start your application.</p>
+
+<pre><code>$ curl -X PUT -u &quot;testuser:123&quot; -d &quot;appname=myapp&amp;running=true&quot; \
+       https://api.cloudno.de/app  
+</code></pre>
+
+<p>Visit your application via http://myapp.cloudno.de</p>
+
+<h1 id="git">Git</h1>
+
+<p>Git is a distributed version control system. Each application on Cloudnode has its own repository. On every push command the Node VM is updated with the latest version of your application. An automatic restart ensures that the most recent version goes live after the push command completes.</p>
+
+<p>Cloudnode Remote
+Branches
+Special Directories
+Submodules</p>
+
+<h3 id="cloudnoderemote">Cloudnode Remote</h3>
+
+<p>When creating a new Cloudnode App with the command line client, a Git remote pointing to Cloudnode is automatically configured. If you wish to configure the remote manually or re-add the remote under a different name, you can:</p>
+
+<pre><code>$ git remote add cloudnode git@cloudno.de:demoapp.git
+</code></pre>
+
+<p>In this example Cloudnode (the third argument to git) is the name of the remote and demoapp should be replaced with your app name.</p>
+
+<p>Branches</p>
+
+<p>Cloudnode will ignore branches other than master if they are pushed. Only the master branch is used for deployment.</p>
+
+<p>You can, of course, push any local branch to the master branch of the Cloudnode remote. The syntax for that is:</p>
+
+<pre><code>$ git push cloudnode demobranch:master
+</code></pre>
+
+<p>In this example Cloudnode (the second argument to git) is the name of the remote and demobranch is the name of the local branch being deployed to Cloudnode.</p>
+
+<h3 id="specialdirectories">Special Directories</h3>
+
+<p>A couple directories are handled specially by the Cloudnode app compiler when receiving your app code. The following directories will be ignored if they exist in your Git repository, so they can be used by the platform for special purposes:</p>
+
+<p>mnt/
+Used for mounting your app&#8217;s Cloud Storage.
+log/
+Used for log collection. See Logging for details and usage.
+tmp/
+Writeable directory available for transient file storage. See Platform Prerequisites for details and usage.</p>
+
+<h3 id="submodules">Submodules</h3>
+
+<p>Git submodules are supported on the Cloudnode platform.</p>
