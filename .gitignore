@@ -5,3 +5,5 @@ guide-formatted.pdf
 *.aux
 *.glo
 *.out
+*.log
+.DS_Store
