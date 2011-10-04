@@ -26,8 +26,8 @@ The conversion is done in three steps:
 
 [Cloudnode User's Guide](https://github.com/dvbportal/cloudnode-wiki/raw/master/guide.pdf)
 
-## Required Tools to build the PDF
+## Required Tools to build the PDF (on Mac)
 
-**Multimarkdown:** https://github.com/fletcher/MultiMarkdown<br />
-**LaTex Live 2011 Basic:** http://www.tug.org/mactex/2011/morepackages.html<br />
-**peg-multimarkdown-latex-support:** https://github.com/fletcher/peg-multimarkdown-latex-support<br />
+* **Multimarkdown:** https://github.com/fletcher/MultiMarkdown
+* **LaTex Live 2011 Basic:** http://www.tug.org/mactex/2011/morepackages.html
+* **peg-multimarkdown-latex-support:** https://github.com/fletcher/peg-multimarkdown-latex-support
