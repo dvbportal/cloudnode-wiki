@@ -1,4 +1,5 @@
 # Quick Start Guide
+
 If this is your first time using Cloudnode, be sure to first install the command line client and look over the platform prerequisites before proceeding. Also, make sure you have a working Node installation, otherwise any node commands listed below will not work.
 
 * <a href="#create-new-app">Create a new cloudnode app</a>
@@ -17,7 +18,9 @@ Go to <span class="external">[My Apps](https://cloudno.de/myapps)</span>, click 
 <a name="init-new-node"></a>
 ## Initialize your local working copy
 
-The easiest way is to use the [command line client](/cloudnode-command-line) to setup your local working copy.
+The easiest way is to use the [command line client](/cloudnode-command-line) to setup your local working copy. If this is the first time you are using the command line client make sure to enter your credentials first, or you will get the error "ERROR [HTTP 401] No authentication data sent". Details on installing and entering the credentials can be found [here](cloudnode-command-line).
+
+__Important note for Windows users:__ The "cloudnode app init" command is not yet supported. Please execute the steps 1.-7. one by one because git automation is not yet supported.
 
     $ cloudnode app init <app name>
     cloudnode info initializing git repo for <app name> into folder <app name>

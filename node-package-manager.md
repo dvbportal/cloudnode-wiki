@@ -1,6 +1,6 @@
-# Node package manager
+# Node Package Manager
 
-__Current version: npm 1.0.22 (08/07/11) (see also: how to update, changelog)__
+__Current version: npm 1.1.4 (03/18/12) (see also: how to update, changelog)__
 
 Cloudnode uses <span class="external">[npm](http://npmjs.org/)</span> for dependency management. For an introduction and additional information see the Author's <span class="external">[article on How To Node](http://howtonode.org/introduction-to-npm)</span>. If you need more specific information, the best place to look is npm’s help system itself, which is very extensive. Just use npm help <topic>.
 

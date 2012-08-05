@@ -1,6 +1,6 @@
 # Node.js
 
-__Current version: 0.4.10 (08/07/11) (see also: how to update, changelog)__
+__Current versions: 0.4.12, 0.6.12 (03/17/12)__
 
 Node.js is a non-blocking, evented I/O framework using the V8 JavaScript engine.
 

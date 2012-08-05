@@ -1,4 +1,5 @@
 # Prerequisites
+
 Since Cloudnode is a cloud hosting environment, your app must conform to a couple different requirements and prerequisites in order to run on it. By following these best practices in app architecture and design, you can ensure that your app will run well on the Cloudnode platform.
 
 * <a href="#required-software">Required Software</a>
@@ -14,10 +15,10 @@ Since Cloudnode is a cloud hosting environment, your app must conform to a coupl
 
 The workflow used to develop and deploy apps on Cloudnode depends on Git, Node.JS, npm and our command line client, which in fact is a node app itself. The tools are available for all major OS'es. See the following links
 
-* git - <span class="external"><http://git-scm.com/></span> - The distributed version control sysstem
+* git - <span class="external"><http://git-scm.com/></span> - The distributed version control system
 * node.js - <span class="external"><http://nodejs.org></span> - The node server
 * npm - <span class="external"><http://npmjs.org/></span> - The Node Package Manager
-* cloudnode - __npm install cloudnode-cli__ - The Cloudnode command line
+* cloudnode - __npm install cloudnode-cli -g__ - The  [Cloudnode command line](/cloudnode-command-line)
 
 <a name="best-practices"></a>
 ## Best Practices
@@ -27,6 +28,10 @@ Take care to keep the size of your app small.
 Do not include large files (documents, media files, data files, etc.) in your app. These should be hosted on an outside asset store such as Amazon S3.
 
 Only include modules that you will use.
+
+### Sensitive data and passwords ###
+ 
+Make sure to keep sensitive data outside of your code because the repositories are public. It is recommended to store sensitive data using [environment variables](/api#env). 
 
 <a name="read-only-filesystem"></a>
 ## Read-only Filesystem

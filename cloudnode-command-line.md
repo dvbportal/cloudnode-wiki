@@ -1,6 +1,6 @@
-# Cloudnode command line
+# Cloudnode Command Line
 
-__Current version: 0.2.20 (08/28/11) (see also: how to update, changelog)__
+__Current version: 0.2.22 (02/18/12) (see also: how to update, changelog)__
 
 The Cloudnode command line tool is an interface to the [Cloudnode Web API](/api) and includes support for creating apps, reading log files, managing apps and user accounts, setting up domains, and configuring apps. 
 
@@ -13,6 +13,9 @@ If you haven't already done, sign up for a Cloudnode account. You will need to e
 The command line tool can be installed using [npm](/node-package-manager) which also takes care to resolve dependencies.
 
     $ npm install cloudnode-cli
+
+The above command does not require root rights and installs the tools in your home directory. Make sure that your PATH includes ~/node_modules/.bin
+If you are root you can install the tools globally using the -g flag.  
 
 ## Usage
 

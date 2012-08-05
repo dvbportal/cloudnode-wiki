@@ -51,6 +51,10 @@ Make sure that you have uploaded your public SSH key to <span class="external">[
     
     2048 ab:f2:46:70:30:48:31:05:79:e2:eb:f5:95:38:08:50 .ssh/id_rsa.pub
 
+If you have problems with your SSH key being accepted, make sure that there are **no line breaks** in the file. The block should start with the ssh- identifier followed by the basse64 encoded key block and an email address or other identifier like in the following sample:
+
+<img src="http://static.jgate.de/img/public-key.png" alt="Cloudnode Logo" />
+
 With your SSH key on file, you can create your first application. The ssh connection will not work, until you have created an application.
 
 After your first app is created, the next step is testing your connection by running _ssh cloudnode@git.cloudno.de_. If your key works, you should get a success message:

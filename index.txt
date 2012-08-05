@@ -22,6 +22,8 @@ node.js.md
 
 couchdb.md
 
+redis.md
+
 ssl.md
 
 http-caching.md
